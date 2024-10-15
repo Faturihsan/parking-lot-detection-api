@@ -1,0 +1,88 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object Detection</title>
+    <style>
+      #videoContainer {
+        position: relative;
+        width: 640px;
+        height: 640px;
+      }
+
+      #frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .bounding-box {
+        position: absolute;
+        border: 2px solid red;
+        color: white;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Real-time Object Detection</h1>
+    <div id="videoContainer">
+      <img id="frame" src="" alt="Video Frame" />
+      <canvas id="overlay" width="640" height="640"></canvas>
+    </div>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:3000");
+      const frameImg = document.getElementById("frame");
+      const overlayCanvas = document.getElementById("overlay");
+      const ctx = overlayCanvas.getContext("2d");
+
+      // WebSocket connection
+      ws.onopen = function () {
+        console.log("Connected to WebSocket");
+      };
+
+      ws.onmessage = async function (event) {
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.frameData) {
+            // Verify the image format is supported by Sharp
+            const imageBase64 = data.frameData[0].image;
+            if (
+              !imageBase64.startsWith("data:image/jpeg") &&
+              !imageBase64.startsWith("data:image/png")
+            ) {
+              throw new Error("Unsupported image format");
+            }
+
+            const imageBuffer = Buffer.from(
+              imageBase64.split(",")[1],
+              "base64"
+            );
+
+            // Process the image using Sharp
+            const processedImage = await sharp(imageBuffer).toBuffer();
+
+            console.log("Successfully processed image");
+          }
+        } catch (error) {
+          console.error("Error processing frame:", error);
+        }
+      };
+
+      ws.onclose = function () {
+        console.log("WebSocket connection closed");
+      };
+    </script>
+  </body>
+</html> -->
